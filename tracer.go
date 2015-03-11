@@ -29,6 +29,10 @@ func (t *Tracer) TimeFunc(pathComponent string, tracedFunc TracedFunc) {
 	tracer.Time(func() { tracedFunc(tracer) })
 }
 
+func (t *Tracer) GetRegistry() metrics.Registry {
+	return t.registry
+}
+
 func (t *Tracer) GetOrRegister(pathComponent string) *Tracer {
 	var buffer bytes.Buffer
 	buffer.WriteString(t.path)
