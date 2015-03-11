@@ -31,7 +31,7 @@ func (t *Tracer) TimeFunc(pathComponent string, tracedFunc TracedFunc) {
 	buffer.WriteString(pathComponent)
 	path := buffer.String()
 	tracer, _ := t.registry.GetOrRegister(path, tracerGenerator(path)).(*Tracer)
-	tracer.timer.Time(func() { tracedFunc(tracer) })
+	tracer.Time(func() { tracedFunc(tracer) })
 }
 
 // Path of the Tracer
