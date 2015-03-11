@@ -87,10 +87,10 @@ type tracerRegistry struct {
 }
 
 func (tr *tracerRegistry) registered() map[string]*Tracer {
-	registeredTracers := make(map[string]*Tracer, len(tr.tracePaths))
 	// No need for a write lock here, despite the confusing method name
 	tr.mutex.RLock()
 	defer tr.mutex.RUnlock()
+	registeredTracers := make(map[string]*Tracer, len(tr.tracePaths))
 	for path, t := range tr.tracePaths {
 		registeredTracers[path] = t
 	}
