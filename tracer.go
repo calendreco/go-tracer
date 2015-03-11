@@ -25,13 +25,18 @@ type TracedFunc func(*Tracer)
 // Tracer, appending ".pathComponent" to its trace path. The tracer
 // passed to `tracedFunc` can be used to further add to the trace.
 func (t *Tracer) TimeFunc(pathComponent string, tracedFunc TracedFunc) {
+	tracer := t.GetOrRegister(pathComponent)
+	tracer.Time(func() { tracedFunc(tracer) })
+}
+
+func (t *Tracer) GetOrRegister(pathComponent string) *Tracer {
 	var buffer bytes.Buffer
 	buffer.WriteString(t.path)
 	buffer.WriteString(".")
 	buffer.WriteString(pathComponent)
 	path := buffer.String()
 	tracer, _ := t.registry.GetOrRegister(path, tracerGenerator(path)).(*Tracer)
-	tracer.Time(func() { tracedFunc(tracer) })
+	return tracer
 }
 
 // Path of the Tracer
